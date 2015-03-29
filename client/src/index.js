@@ -1,4 +1,6 @@
+// Dépendances
 var React = require('react');
+//var Bookmark = require('react-bookmark-line');
 var request = require('superagent');
 var slug = require('slug');
 
@@ -26,9 +28,8 @@ var data = {
       });
   },
 
-  // On supprimme une bookmark. On récree son identifiant à partir du lien.
+  // On supprimme une bookmark (on trouve son identifiant à partir du lien).
   deleteBookmark: function(bookmark, callback) {
-    console.log(bookmark);
     request
       .del('/api/bookmarks/' + slug(bookmark.link))
       .end(callback);
@@ -92,7 +93,7 @@ var BookmarkList = React.createClass({
 
       // Changement d'état.
       this.setState({ bookmarks: bookmarks });
-      // Requête au server.
+      // Requête au serveur.
       data.deleteBookmark(bookmark, function () {});
     }
   },
@@ -104,7 +105,8 @@ var BookmarkList = React.createClass({
     // Ici on prépare la liste à partir des proprités.
     var bookmarks = this.state.bookmarks.map(function(bookmark) {
       return (
-        <Bookmark title={bookmark.title} link={bookmark.link}
+        <Bookmark title={bookmark.title}
+                  link={bookmark.link}
                   removeLine={removeLine}>
         </Bookmark>
       );
@@ -159,6 +161,12 @@ var Bookmark = React.createClass({
 
 // Ici on démarre !
 data.getBookmarks(function(err, bookmarks) {
-  React.render(<App bookmarks={bookmarks.rows}></App>,
-               document.getElementById('app'));
+  if (bookmarks === undefined) {
+    alert("Je n'ai pas réussi à récupérer les bookmarks");
+  } else {
+    // Attention le premier élément de react ne doit pas être attaché directement
+    // à l'élément body.
+    React.render(<App bookmarks={bookmarks.rows}></App>,
+                 document.getElementById('app'));
+  }
 });

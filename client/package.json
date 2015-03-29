@@ -4,16 +4,17 @@
   "description": "Client for My Bookmarks application.",
   "main": "src/index.js",
   "dependencies": {
-    "react": "0.13.1",
+    "react": "^0.13.1",
     "slug": "^0.8.0",
-    "superagent": "1.1.0"
+    "superagent": "^1.1.0",
+    "react-bookmark-line": "^0.1.0"
   },
   "devDependencies": {
-    "browserify": "9.0.3",
-    "envify": "3.4.0",
-    "reactify": "1.1.0",
-    "uglify-js": "2.4.17",
-    "watchify": "2.5.0"
+    "browserify": "^9.0.3",
+    "envify": "^3.4.0",
+    "reactify": "^1.1.0",
+    "uglify-js": "^2.4.17",
+    "watchify": "^2.5.0"
   },
   "scripts": {
     "start": "node_modules/.bin/watchify src/index.js -o ./public/browser-bundle.js -v -d .",

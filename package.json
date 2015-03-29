@@ -2,13 +2,14 @@
   "name": "my-bookmarks",
   "version": "1.0.3",
   "description": "Example of single-page application that you can easily deploy and share",
-  "main": "index.js",
+  "main": "server.js",
   "bin": {
     "my-bookmarks": "bin/my-bookmarks"
   },
   "scripts": {
     "build": "cd client && npm run-script build",
-    "test": "npm test"
+    "test": "mocha test",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -25,12 +26,10 @@
   "dependencies": {
     "body-parser": "^1.12.2",
     "express": "^4.12.3",
-    "express-error-handler": "^1.0.1",
     "method-override": "^2.3.2",
     "morgan": "^1.5.2",
     "path-extra": "^1.0.2",
     "pouchdb": "^3.3.1",
-    "slug": "^0.8.0",
-    "slugify": "^0.1.1"
+    "slug": "^0.8.0"
   }
 }

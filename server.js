@@ -1,10 +1,13 @@
 // Dépendances
 var path = require('path');
 var slug = require('slug');
+
 var express = require('express')
+
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+
 var PouchDB = require('pouchdb');
 
 // On génère la base de données.
@@ -15,15 +18,15 @@ var app = express();
 
 // Configuration du serveur Express.
 app.use(express.static(path.join(__dirname, 'client', 'public')));
-app.use(methodOverride());
-app.use(bodyParser.json());
-app.use(morgan('dev'));
+app.use(methodOverride()); // Pour gérer autre chose que du GET et du POST.
+app.use(bodyParser.json()); // Parser de JSON vers un objet JS.
+app.use(morgan('dev')); // Logging.
 
 
 // On définit les contrôleurs.
 var controllers = {
 
-  // L
+  // Contrôleur d'introduction.
   base: {
     index: function (req, res) {
       res.send('My Bookmarks API');
@@ -32,21 +35,35 @@ var controllers = {
 
   bookmarks: {
 
+    // Contrôleur renvoyant toutes les bookmarks.
     all: function (req, res) {
+
+      // Filtre pour récupérer les documents de type bookmark.
       var allBookmarks = function (doc) {
         if (doc.type === 'bookmark') {
+          // Quand le document satisfait les conditions, on l'émet, il est
+          // ajouté aux résultat de la requête.
           emit(doc._id, null);
         };
       };
 
+      // Ici on demande de récupérer tous les éléments satisfaisants notre
+      // filtre.
       db.query(allBookmarks, {include_docs: true}, function (err, data) {
+
         if (err) {
           console.log(err);
           res.status(500).send({msg: err});
+
         } else {
           var result = {
             rows: []
           };
+          // data contient une liste de couple clé/document. Où la clé est
+          // l'identifiant dans notre cas et le document est la bookmark qui
+          // nous intéresse.
+          // Le formalisme de retour de pouchdb, ne nous convient pas,
+          // on le simplifie un peu.
           data.rows.forEach(function (row) {
             result.rows.push(row.doc);
           });
@@ -55,15 +72,18 @@ var controllers = {
       });
     },
 
+
+    // Contrôleur de création de documents.
     create: function (req, res) {
       var bookmark = req.body;
 
-      console.log(bookmark);
       if (bookmark === undefined || bookmark.link === undefined) {
         res.status(400).send({msg: 'Bookmark malformed.'});
 
       } else {
         var id = slug(bookmark.link);
+
+        // On récupère le document pour voir s'il n'existe pas déjà.
         db.get(id, function (err, doc) {
 
           if (err && !(err.status === 404)) {
@@ -71,10 +91,11 @@ var controllers = {
             res.status(500).send({msg: err});
 
           } else if (doc !== undefined) {
-            console.log(doc);
             res.status(400).send({msg: 'Bookmark already exists.'});
 
           } else {
+
+            // On crée le document en forçant l'identifiant et le type.
             bookmark.type = 'bookmark';
             bookmark._id = id;
             db.put(bookmark, function (err, bookmark) {
@@ -93,8 +114,12 @@ var controllers = {
       }
     },
 
+
+    // Contrôleur de suppression du document.
     delete: function (req, res) {
       var id = req.params.id;
+
+      // On vérifie que le document existe bien.
       db.get(id, function (err, doc) {
 
         if (err) {
@@ -106,6 +131,7 @@ var controllers = {
 
         } else {
 
+          // Suppression du document.
           db.remove(doc, function (err) {
             if (err) {
               console.log(err);
