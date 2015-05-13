@@ -2,7 +2,7 @@
   "name": "my-bookmarks-client",
   "version": "0.0.1",
   "description": "Client for My Bookmarks application.",
-  "main": "src/index.js",
+  "main": "src/index.coffee",
   "dependencies": {
     "react": "^0.13.1",
     "slug": "^0.8.0",
@@ -17,8 +17,8 @@
     "coffeeify": "^1.0.0"
   },
   "scripts": {
-    "start": "node_modules/.bin/watchify src/index.js -o ./public/browser-bundle.js -v -d .",
-    "build": "NODE_ENV=production ./node_modules/.bin/browserify -t coffeeify . > ./public/browser-bundle.js",
+    "start": "node_modules/.bin/watchify -t coffeeify .  -o ./public/browser-bundle.js -v -d .",
+    "build": "./node_modules/.bin/browserify -t coffeeify . > ./public/browser-bundle.js",
     "build-min": "NODE_ENV=production ./node_modules/.bin/browserify -t coffeeify . | ./node_modules/.bin/uglifyjs -cm > ./public/browser-bundle.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
