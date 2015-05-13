@@ -2,4 +2,5 @@ client/public/browser-bundle.js
 node_modules
 *~
 *.swp
-db
+my-bookmarks-db
+build

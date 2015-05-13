@@ -17,4 +17,4 @@ process.chdir(defaultDir);
 
 // On démarre le serveur.
 // __dirname donne le chemin absolu du répertoir courant du fichier de code.
-require(path.join(__dirname, '..', 'server'));
+require(path.join(__dirname, '..', 'build', 'server'));
