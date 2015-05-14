@@ -17,41 +17,30 @@ module.exports =
             res.status(400).send msg: 'Bookmark malformed.'
 
         else
-            # On récupère le document pour voir s'il n'existe pas déjà.
-            Bookmark.findByLink bookmark.link, (err, bookmark) ->
+            Bookmark.create bookmark, (err, bookmarkModel) ->
 
                 if err
-                    next err
-
-                else if bookmark?
-                    res.status(400).send msg: 'Bookmark already exists.'
+                    console.log err
+                    res.status(500).send msg: err
 
                 else
-
-                    Bookmark.create bookmark, (err, bookmarkModel) ->
-
-                        if err
-                            console.log err
-                            res.status(500).send msg: err
-
-                        else
-                            res.send bookmarkModel
+                    res.send bookmarkModel
 
 
     delete: (req, res, next) ->
 
-        Bookmark.find req.params.id, (err, doc) ->
+        Bookmark.find req.params.id, (err, bookmark) ->
 
             if err
                 console.log err
                 res.status(500).send msg: err
 
-            else if not doc?
+            else if not bookmark?
                 res.status(404).send msg: 'Bookmark does not exist.'
 
             else
-                # Suppression du document.
-                db.remove doc, (err) ->
+                # Suppression du bookmarkument.
+                bookmark.destroy (err) ->
                     if err
                         console.log err
                         res.status(500).send msg: err
