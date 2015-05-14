@@ -1,4 +1,40 @@
 
+### Environnement de développement
+
+
+Prérequis NPM et Git :
+
+```
+sudo apt-get install npm
+sudo apt-get install nodejs
+```
+
+Récupérer les sources :
+
+```
+git clone https://github.com/frankrousseau/shareable-app-coffee-americano
+cd shareable-app-coffee-americano
+```
+
+Pour le serveur :
+
+```
+npm install
+
+# On démarre l'application
+coffee server.coffee
+```
+
+Pour le client : 
+
+```
+cd client
+npm install
+
+# On démarre l'outil qui va regénérer le client après chaque modification.
+npm start
+```
+
 
 ### Publication
 
